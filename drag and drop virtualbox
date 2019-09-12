@@ -1,0 +1,7 @@
+in order to drag and drop:
+
+you need to follow the next steps:
+1. enable drag and drop feature on virtual box preferences
+2. insert guest additions cd image
+3. turn off virtualbox.
+4. turn it back on...
