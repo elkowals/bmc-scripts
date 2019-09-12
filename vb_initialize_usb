@@ -1,1 +1,15 @@
-
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Initialize USB device for virtualbox</h1>
+<br>
+<p>1. Make sure that the Extension Pack is installed on the host. The same version as VirtualBox.<br>
+2. Make sure that at least USB 2.0 is enabled in your VM settings.<br>
+3. Create a USB filter in your guest settings while the device is plugged in the host.<br>
+   Delete all values except Name, VendorID and ProductID. <br>
+   Check also http://www.linux-usb.org/usb.ids to make sure that you have the numbers correct.<br>
+4. Unplug the device.<br>
+5. Start your guest (the one that you applied the filter to). Let it start completely. Log in if you have to.<br>
+6. Plug your device. The filter should capture it and pass control to your guest.</p>
+</body>
+</html>
