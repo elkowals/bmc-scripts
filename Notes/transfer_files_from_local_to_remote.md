@@ -1,5 +1,5 @@
 <html>
-<head><title>Bring-up and test - Transfering files to ast2600 from local windows/linux machine</title></head>
+<head>Bring-up and test - Transfering files to ast2600 from local windows/linux machine</head>
 
 <body>
 <p>You are in need of transfering files from your local machine to your server; if you have access via network to your server
