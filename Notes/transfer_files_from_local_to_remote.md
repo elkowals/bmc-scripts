@@ -24,6 +24,21 @@ emile.sh                                                       100%  733     6.3
 
 </code></pre></div></div>
 
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight">
+<code> 
+
+root@rain10bmc:~# scp elkowals@9.3.185.93:/gsa/ausgsa/home/e/l/elkowals/web/public/fan_speed.sh .
+
+Host '9.3.185.93' is not in the trusted hosts file.
+(ssh-rsa fingerprint sha1!! 10:ce:89:b8:32:dd:4e:b7:b4:17:4d:bf:cb:0d:3c:ad:3e:5f:f7:d6)
+Do you want to continue connecting? (y/n) y
+elkowals@9.3.185.93's password:
+fan_speed.sh                                  100% 6346     6.2KB/s   00:00
+
+
+</code></pre></div></div>
+
+
 <p> you need to have putty installed in windows to have scp available.</p>
 </body>
 </html>
