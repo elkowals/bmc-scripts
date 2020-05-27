@@ -27,6 +27,9 @@ emile.sh                                                       100%  733     6.3
 <div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight">
 <code> 
 
+use AFS pwd
+ip -> to GSA
+
 root@rain10bmc:~# scp elkowals@9.3.185.93:/gsa/ausgsa/home/e/l/elkowals/web/public/fan_speed.sh .
 
 Host '9.3.185.93' is not in the trusted hosts file.
