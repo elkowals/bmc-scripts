@@ -1,3 +1,6 @@
 OpenBMC_emmc_200.sh = sets eMMC speed to 200Mhz and adds phase tuning.
 OpenBMC_enable_rsvd_slots.py = Enables/Disabled reserved bits of PCIe adapters.
 OpenBMC_syspwrok = running './syspwrok' will output state of system power.
+OpenBMC_apss_sensors.sh = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
+OpenBMC_fan_speed.sh = running './fan_speed.sh will change fan speeds. Three arguments can be used: [MAX|LOW|VALUE] = [11200|6000|anyvalue].
+OpenBMC_ucd_monitor.sh = Collects and reports UCD voltages and GPIO states.
