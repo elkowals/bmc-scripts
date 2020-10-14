@@ -1,0 +1,4 @@
+gpiochip=$(gpiodetect | grep ucd)
+gpiochip="${gpiochip:0:9}"
+syspwrok=$(gpioget $gpiochip 43)
+echo "sys_pwrok = " $syspwrok
