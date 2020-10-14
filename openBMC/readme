@@ -4,3 +4,11 @@ OpenBMC_syspwrok = running './syspwrok' will output state of system power.
 OpenBMC_apss_sensors.sh = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
 OpenBMC_fan_speed.sh = running './fan_speed.sh will change fan speeds. Three arguments can be used: [MAX|LOW|VALUE] = [11200|6000|anyvalue].
 OpenBMC_ucd_monitor.sh = Collects and reports UCD voltages and GPIO states.
+OpenBMC_fanctl = running './fanctl set <args>'
+NAME
+      fanctl - Manually control, get fan tachs, view status, and resume
+               automatic control of all fans within a chassis.
+  SYNOPSIS
+      fanctl [set <TARGET>|get|status|resume]
+  OPTIONS
+      <TARGET> - RPM/PWM target speed of all the fans.
