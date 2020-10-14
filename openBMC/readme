@@ -1,10 +1,64 @@
 OpenBMC_emmc_200.sh = sets eMMC speed to 200Mhz and adds phase tuning.
+SYNTAX:
+[No arguments taken]
+
+EXAMPLE:
+      #./emmc_200.sh
+      
+
 OpenBMC_enable_rsvd_slots.py = Enables/Disabled reserved bits of PCIe adapters.
+SYNTAX:
+NAME
+      enable_rsvd_slots.py - [slot#|none]
+
+EXAMPLE:
+      #./enable_rsvd_slots.py 0,1,2,3 
+      this will enable reserved bits to C0, C1, C2 and C3. The remaining slots are all disabled.
+      
+      #./enable_rsvd_slots.py none
+      this will disable all reserved bits to all slots.
+
+
+
 OpenBMC_syspwrok = running './syspwrok' will output state of system power.
+SYNTAX:
+[No arguments taken]
+
+EXAMPLE:
+      #./syspwrok
+
+
 OpenBMC_apss_sensors.sh = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
-OpenBMC_fan_speed.sh = running './fan_speed.sh will change fan speeds. Three arguments can be used: [MAX|LOW|VALUE] = [11200|6000|anyvalue].
+SYNTAX:
+[No arguments taken]
+
+EXAMPLE:
+      #./apss_sensors.sh
+
+
+OpenBMC_fan_speed.sh = running './fan_speed.sh will change fan speeds.
+SYNTAX:
+NAME
+    fan_speed.sh - MAX/LOW/VALUE(rpm) fan speed
+SYNOPSIS
+    fan_speed.sh [MAX|LOW|VALUE]
+              [11200|6000|anyvalue]
+EXAMPLE:
+    #./fan_speed.sh 6000
+    #./fan_speed.sh MAX
+    #./fan_speed.sh LOW
+    
+    
 OpenBMC_ucd_monitor.sh = Collects and reports UCD voltages and GPIO states.
+SYNTAX:
+[No arguments taken]
+
+EXAMPLE:
+      #./ucd_monitor.sh
+      
+      
 OpenBMC_fanctl = running './fanctl set <args>'
+SYNTAX:
 NAME
       fanctl - Manually control, get fan tachs, view status, and resume
                automatic control of all fans within a chassis.
@@ -12,3 +66,6 @@ NAME
       fanctl [set <TARGET>|get|status|resume]
   OPTIONS
       <TARGET> - RPM/PWM target speed of all the fans.
+
+EXAMPLE:
+      #./fanctl set 6000
