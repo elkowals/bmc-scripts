@@ -1,0 +1,264 @@
+#!/bin/sh -e
+set -euo pipefail
+
+# Operation
+OP=$1
+
+# Service
+FAN_CONTROL_SRV=phosphor-fan-control@0.service
+
+# Paths
+FANTACH_PATH=/xyz/openbmc_project/sensors/fan_tach
+MB_PATH=/xyz/openbmc_project/inventory/system/chassis/motherboard
+
+# Interfaces
+FANSPEED_INTF=xyz.openbmc_project.Control.FanSpeed
+FANPWM_INTF=xyz.openbmc_project.Control.FanPwm
+VALUE_INTF=xyz.openbmc_project.Sensor.Value
+ITEM_INTF=xyz.openbmc_project.Inventory.Item
+OPSTATUS_INTF=xyz.openbmc_project.State.Decorator.OperationalStatus
+
+# Properties
+TARGET_PROP=Target
+VALUE_PROP=Value
+PRESENT_PROP=Present
+FUNCTIONAL_PROP=Functional
+
+print_help ()
+{
+    echo "
+  NAME
+      fanctl - Manually control, get fan tachs, view status, and resume
+               automatic control of all fans within a chassis.
+  SYNOPSIS
+      fanctl [set <TARGET>|get|status|resume]
+  OPTIONS
+      <TARGET> - RPM/PWM target speed of all the fans
+    " && exit 0
+}
+
+systemctl ()
+{
+    /bin/systemctl "$@"
+}
+
+getService ()
+{
+    /usr/bin/mapper get-service "$1"
+}
+
+setProperty ()
+{
+    /usr/bin/busctl set-property $(getService "$1") "$@"
+}
+
+getProperty ()
+{
+    /usr/bin/busctl get-property $(getService "$1") "$@"
+}
+
+getSubTreePaths ()
+{
+    local -n paths=$1
+    PATHS=( $(/usr/bin/busctl call xyz.openbmc_project.ObjectMapper /xyz/openbmc_project/object_mapper xyz.openbmc_project.ObjectMapper GetSubTreePaths sias ${@:2}) )
+    if [ "${#PATHS[@]}" -gt 2 ]; then
+        # Number of paths returned in `GetSubTreePaths` method call
+        NUM_PATHS="${PATHS[1]}"
+        for path in "${PATHS[@]:2:${NUM_PATHS}}"; do
+            # Strip surrounding double-quotes
+            path="${path%\"}"
+            path="${path#\"}"
+            paths+=("${path}")
+        done
+    fi
+}
+
+if [ "$#" -lt 1 ]; then
+    print_help
+fi
+
+# Process operation
+if [ "${OP}" == "resume" ]; then
+    systemctl start $FAN_CONTROL_SRV
+    if [ $? -eq 0 ]; then
+        echo "Fan control service started"
+    else
+        echo "Failed to start fan control service"
+    fi
+elif [ "${OP}" == "set" ]; then
+    # Make sure a target value is provided
+    if [ -z "$2" ]; then
+        echo "No TARGET provided"
+        print_help
+        exit -1
+    fi
+
+    # Get the fan target object paths for the system
+    declare -a targets
+    TARGET=$2
+    INTFS=$FANSPEED_INTF
+    getSubTreePaths targets $FANTACH_PATH 1 1 $INTFS
+    if [ ${#targets[@]} -eq 0 ]; then
+        INTFS=$FANPWM_INTF
+        getSubTreePaths targets $FANTACH_PATH 1 1 $INTFS
+    fi
+
+    # Stop the fan control service and set each fan found to target value
+    if [ ${#targets[@]} -gt 0 ]; then
+        systemctl stop $FAN_CONTROL_SRV
+        for fan in "${targets[@]}"; do
+            setProperty ${fan} $INTFS $TARGET_PROP t $TARGET
+            if [ $? -ne 0 ]; then
+                if [ $INTFS == $FANSPEED_INTF ]; then
+                    echo "Failed to set ${fan} to $TARGET RPMs"
+                else
+                    echo "Failed to set ${fan} to a $TARGET PWM"
+                fi
+            fi
+        done
+    else
+        echo "No fan targets found"
+    fi
+elif [ "${OP}" == "get" ]; then
+    # Get the fan target object paths for the system
+    declare -a targets
+    intf="RPM"
+    INTFS=$FANSPEED_INTF
+    getSubTreePaths targets $FANTACH_PATH 1 1 $INTFS
+    if [ ${#targets[@]} -eq 0 ]; then
+        intf="PWM"
+        INTFS=$FANPWM_INTF
+        getSubTreePaths targets $FANTACH_PATH 1 1 $INTFS
+    fi
+
+    # Get the fan feedback object paths for the system
+    declare -a feedbacks
+    getSubTreePaths feedbacks $FANTACH_PATH 1 1 $VALUE_INTF
+
+    divider=========================================
+    divider=$divider$divider
+    header="\n%-14s %13s %17s %16s\n"
+    format="%-14s %13s %17s %16s\n"
+
+    width=63
+    printf "$header" "TARGET SENSOR" "TARGET($intf)" "FEEDBACK SENSOR" "FEEDBACK(RPMS)"
+    printf "%$width.${width}s\n" "$divider"
+
+    declare -a entry
+    for fan in "${targets[@]}"; do
+        target=( $(getProperty ${fan} $INTFS $TARGET_PROP) )
+        fan=${fan##*/}
+        entry+=(${fan})
+        if [ "${#target[@]}" -gt 1 ]; then
+            target="${target[1]}"
+            entry+=("${target}")
+        fi
+        for sensor in "${feedbacks[@]}"; do
+            if [[ "${sensor}" == *"${fan%_*}"* ]]; then
+                feedback=( $(getProperty ${sensor} $VALUE_INTF $VALUE_PROP) )
+                sensor=${sensor##*/}
+                entry+=("${sensor}")
+                if [ "${#feedback[@]}" -gt 1 ]; then
+                    feedback="${feedback[1]}"
+                    entry+=("${feedback}")
+                fi
+                printf "$format" "${entry[@]}"
+                unset entry
+                entry+=("")
+                entry+=("")
+            fi
+        done
+        unset entry
+    done
+elif [ "${OP}" == "status" ]; then
+    # Get the run state of the fan control service
+    actstate=$(systemctl show -p ActiveState --value $FAN_CONTROL_SRV)
+    substate=$(systemctl show -p SubState --value $FAN_CONTROL_SRV)
+
+    # Get the BMC, chassis, and host states
+    bmcstate=$(/usr/bin/obmcutil bmcstate)
+    chassisstate=$(/usr/bin/obmcutil chassisstate)
+    hoststate=$(/usr/bin/obmcutil hoststate)
+
+    # Get the fan target object paths for the system
+    declare -a targets
+    intf="RPM"
+    INTFS=$FANSPEED_INTF
+    getSubTreePaths targets $FANTACH_PATH 1 1 $INTFS
+    if [ ${#targets[@]} -eq 0 ]; then
+        intf="PWM"
+        INTFS=$FANPWM_INTF
+        getSubTreePaths targets $FANTACH_PATH 1 1 $INTFS
+    fi
+
+    # Get the fan feedback object paths for the system
+    declare -a feedbacks
+    getSubTreePaths feedbacks $FANTACH_PATH 1 1 $VALUE_INTF
+
+    # Get the fan inventory object paths for the system
+    declare -a inventory
+    getSubTreePaths inventory $MB_PATH 1 2 $ITEM_INTF $OPSTATUS_INTF
+
+    printf "\nFan Control Service State   : %s(%s)\n\n" "$actstate" "$substate"
+    printf "%s\n" "$bmcstate"
+    printf "%s\n" "$chassisstate"
+    printf "%s\n" "$hoststate"
+
+    divider=========================================
+    divider=$divider$divider
+    header="\n %-8s %13s %16s %9s %12s\n"
+    format=" %-8s %13s %16s %9s %12s\n"
+
+    width=63
+    printf "$header" "FAN" "TARGET($intf)" "FEEDBACKS(RPMS)" "PRESENT" "FUNCTIONAL"
+    printf "%$width.${width}s\n" "$divider"
+
+    declare -a entry
+    for fan in "${targets[@]}"; do
+        target=( $(getProperty ${fan} ${INTFS} $TARGET_PROP) )
+        fan=${fan##*/}
+        fan=${fan%_*}
+        entry+=(${fan})
+        if [ "${#target[@]}" -gt 1 ]; then
+            target="${target[1]}"
+            entry+=("${target}")
+        fi
+        sensors=""
+        for sensor in "${feedbacks[@]}"; do
+            if [[ "${sensor}" == *"$fan"* ]]; then
+                feedback=( $(getProperty ${sensor} $VALUE_INTF $VALUE_PROP) )
+                if [ "${#feedback[@]}" -gt 1 ]; then
+                    feedback="${feedback[1]}"
+                    if [ "${sensors}" != "" ]; then
+                        sensors=$sensors"/"
+                    fi
+                    sensors=$sensors$feedback
+                fi
+            fi
+        done
+        entry+=("${sensors}")
+        for obj in "${inventory[@]}"; do
+            if [[ "${obj}" == *"$fan"* ]]; then
+                present=( $(getProperty ${obj} $ITEM_INTF $PRESENT_PROP) )
+                if [ "${#present[@]}" -gt 1 ]; then
+                    present="${present[1]}"
+                    entry+=("${present}")
+                fi
+                functional=( $(getProperty ${obj} $OPSTATUS_INTF $FUNCTIONAL_PROP) )
+                if [ "${#functional[@]}" -gt 1 ]; then
+                    functional="${functional[1]}"
+                    entry+=("${functional}")
+                fi
+            fi
+        done
+        printf "$format" "${entry[@]}"
+        unset entry
+    done
+else
+    echo "Not a supported parameter ${OP}"
+    print_help
+    exit -1
+fi
+
+exit $?
+
