@@ -1,3 +1,3 @@
 OpenBMC_emmc_200.sh = sets eMMC speed to 200Mhz and adds phase tuning.
 OpenBMC_enable_rsvd_slots.py = Enables/Disabled reserved bits of PCIe adapters.
-OpenBMC_syspwrok = running "./syspwrok will output state of system power.
+OpenBMC_syspwrok = running './syspwrok' will output state of system power.
