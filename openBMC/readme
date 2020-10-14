@@ -1,2 +1,2 @@
-OpenBMC_emmc_200.sh = sets eMMC speed to 200Mhz and ads phase tuning.
-OpenBMC_enable_rsvd_slots.py = Enables/Disabled reserved bits of PCIe adapters.
+OpenBMC_emmc_200.sh = sets eMMC speed to 200Mhz and adds phase tuning.
+OpenBMC_enable_rsvd_slots.py = Enables/Disabled reserved bits of PCIe adapters.ksaldjlkasjdlkasjdlaksjdlaskjdlas;dja;slkdjas;dlkasjd;lkasjd;laskjd;aslkdjas;lkdjas;ldkjas;ldkajs;dlaksjd;slkdjas;lkdjas;lkdjas;ldkjas;dlkasjd;laksjd;aslkdjas;ldkjas;ldkajs;dlkasjd;lkasdja;slkdj
