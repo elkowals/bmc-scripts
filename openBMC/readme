@@ -1,0 +1,2 @@
+OpenBMC_emmc_200.sh = sets eMMC speed to 200Mhz and ads phase tuning.
+OpenBMC_enable_rsvd_slots.py = Enables/Disabled reserved bits of PCIe adapters.
