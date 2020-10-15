@@ -69,3 +69,9 @@ NAME
 
 EXAMPLE:
       #./fanctl set 6000
+
+OpenBMC_fsimaster-aspeed = running './fsimaster-aspeed 0 0x70040110'
+SYNTAX:
+      Changes fsi divider to 1 instead of 2
+EXAMPLE:
+      #./fsimaster-aspeed 0 0x70040110
