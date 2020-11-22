@@ -1,0 +1,27 @@
+set -e
+n=0
+
+while true
+do
+for io in {0..83}
+do 
+	./ucd90320.sh gpio-select $io && ./ucd90320.sh gpio-config $io
+done
+i2cset -y 8 0x11 0x03 cp
+i2cset -y 8 0x11 0x03 cp
+i2cset -y 8 0x11 0x03 cp
+i2cset -y 8 0x11 0x03 cp
+i2cset -y 8 0x11 0x03 cp
+./ucd90320.sh ic-device-id $n && ./ucd90320.sh num-pages $n && ./ucd90320.sh monitor-config $n;
+n=$(( n+1 ))
+if [ $n -gt 31 ]
+then
+n=0
+fi
+sleep 0.01;
+done
+
+
+./ucd90320.sh ic-device-id 3 && ./ucd90320.sh num-pages 3 && ./ucd90320.sh monitor-config 3;
+
+
