@@ -37,7 +37,10 @@ def normal_boot():
     drive("bmc_rstind", 1);
     time.sleep(1)
     drive("userspace_rstind", 1);
-    
+
+def idle_state():
+    drive("bmc_rstind", 0);
+    drive("userspace_rstind", 0);
 
 if len(sys.argv) < 2:
 	print("missing arguments... setting controls to outputs")
@@ -46,6 +49,8 @@ else:
     direction_control()
     if sys.argv[1] == "normal_boot":
         normal_boot()
+    elif sys.argv[1] == "idle_state":
+        idle_state()
 	
     print("write your code in here??")
 
