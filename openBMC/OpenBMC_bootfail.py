@@ -6,18 +6,18 @@
 
 import sys
 import os
-
+import time
 
 def drive(signal_name, logic_state):
 	if signal_name.lower() == "bmc_rstind":
-		if logic_state == "1":
+		if logic_state == 1:
 			os.system("devmem 0x1e780088 32 0xD700C000") # = high for BMC_RSTIND (arm core reset)
 			print("setting bmc_rstind (arm_core_reset) = high")
 		else:
 			os.system("devmem 0x1e780088 32 0xD500C000") # = low for BMC_RSTIND (arm core reset)
 			print("setting bmc_rstind (arm_core_reset) = low")
 	else:
-		if logic_state == "1":
+		if logic_state == 1:
 			os.system("devmem 0x1e780000 32 0x134159FF") # = high for userspace_rstind (SW_PGOOD)
 			print("setting userspace_rstind (SW_PGOOD) = high")
 		else:
@@ -30,15 +30,23 @@ def direction_control():
 	os.system("devmem 0x1e78008C 32 0x02000000") # = output control for bmc_rstind
 
 
+def normal_boot():
+    drive("bmc_rstind", 0);
+    drive("userspace_rstind", 0);
+    time.sleep(5)
+    drive("bmc_rstind", 1);
+    time.sleep(1)
+    drive("userspace_rstind", 1);
+    
+
 if len(sys.argv) < 2:
 	print("missing arguments... setting controls to outputs")
 	direction_control()
 else:
-	direction_control()
-	drive("bmc_rstind", sys.argv[1])
-	print("write your code in here??")
-
-
-
+    direction_control()
+    if sys.argv[1] == "normal_boot":
+        normal_boot()
+	
+    print("write your code in here??")
 
 
