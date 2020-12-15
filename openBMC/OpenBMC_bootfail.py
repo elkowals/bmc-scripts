@@ -52,7 +52,7 @@ if len(sys.argv) < 2:
 	print("missing arguments... setting controls to outputs")
 	direction_control()
 else:
-    #direction_control()
+    
     if sys.argv[1] == "normal_boot":
         normal_boot()
     elif sys.argv[1] == "idle_state":
