@@ -35,8 +35,13 @@ def normal_boot():
     drive("userspace_rstind", 0);
     time.sleep(5)
     drive("bmc_rstind", 1);
-    time.sleep(1)
+    time.sleep(5)
     drive("userspace_rstind", 1);
+
+def successful_cold_boot():
+     drive("userspace_rstind", 0);
+     time.sleep(1)
+     drive("userspace_rstind", 1);
 
 def idle_state():
     drive("bmc_rstind", 0);
@@ -51,6 +56,8 @@ else:
         normal_boot()
     elif sys.argv[1] == "idle_state":
         idle_state()
+    elif sys.argv[1] == "successful_cold_boot":
+        successful_cold_boot()
 	
     print("write your code in here??")
 
