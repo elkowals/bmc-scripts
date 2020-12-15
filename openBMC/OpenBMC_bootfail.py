@@ -38,9 +38,10 @@ def normal_boot():
     time.sleep(5)
     drive("userspace_rstind", 1);
 
-def successful_cold_boot():
+#   delay in milliseconds
+def successful_cold_boot(delay):
      drive("userspace_rstind", 0);
-     time.sleep(1)
+     time.sleep(int(delay)/1000)
      drive("userspace_rstind", 1);
 
 def idle_state():
@@ -51,13 +52,13 @@ if len(sys.argv) < 2:
 	print("missing arguments... setting controls to outputs")
 	direction_control()
 else:
-    direction_control()
+    #direction_control()
     if sys.argv[1] == "normal_boot":
         normal_boot()
     elif sys.argv[1] == "idle_state":
         idle_state()
     elif sys.argv[1] == "successful_cold_boot":
-        successful_cold_boot()
+        successful_cold_boot(sys.argv[2])
 	
     print("write your code in here??")
 
