@@ -1,0 +1,4 @@
+access devmem registers
+example:
+       <reg>      <bits> <value>
+devmem 0x1e78500c 32      0
