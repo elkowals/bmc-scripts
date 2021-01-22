@@ -1,4 +1,4 @@
 to enable devmem from uboot
-fw_printenv bootargs
-fw_setenv bootargs <result from last line> mem.devmem=y
+ast# printenv bootargs
+bootargs=console=ttyS4,115200n8 root=/dev/ram rw mem.devmem=y
 
