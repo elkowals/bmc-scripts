@@ -1,0 +1,4 @@
+to enable devmem from uboot
+fw_printenv bootargs
+fw_setenv bootargs <result from last line> mem.devmem=y
+
