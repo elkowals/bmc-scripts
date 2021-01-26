@@ -1,4 +1,11 @@
 to enable devmem from uboot
 ast# printenv bootargs
-bootargs=console=ttyS4,115200n8 root=/dev/ram rw mem.devmem=y
 
+setenv bootargs console=ttyS4,115200n8 root=/dev/ram rw mem.devmem=y
+printenv bootargs
+# saveenv to save environment to SPI flash
+boot
+Login quickly within seconds (takes ~2.5min to reach login):
+root/0penBmc
+# turn watchdog off - enter within seconds 
+devmem 0x1e78500c 32 0
