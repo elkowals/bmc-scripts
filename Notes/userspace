@@ -2,3 +2,7 @@ access devmem registers
 example:
        <reg>      <bits> <value>
 devmem 0x1e78500c 32      0
+
+
+enabling devmem from userspace:
+fw_setenv bootargs $(fw_printenv bootargs | sed -r 's/bootargs=//') mem.devmem=y
