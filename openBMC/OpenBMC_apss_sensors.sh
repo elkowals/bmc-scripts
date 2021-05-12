@@ -53,7 +53,7 @@ while [ $IDX -lt 32 ] ; do
     BYTE00="$(echo -e "${BYTE0}" | sed -e 's/[[:space:]]*$//')" 
     BYTE11="$(echo -e "${BYTE1}" | sed -e 's/[[:space:]]*$//')" 
     BYTE00=${BYTE00:2}
+    echo "CH$IDX $BYTE11$BYTE00"
     IDX=$((IDX+1))
-    echo "$BYTE11$BYTE00"
 done
 
