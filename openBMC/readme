@@ -39,6 +39,9 @@ It will query all channels.
       #./apss_readings.py 2 0.001 6.5
 It will loop queries to Channel 2 indifinitely with the offset and gain specified and save them into channel_2.txt
 
+      #./apss_readings.py help
+it will display the syntax [channel] [offset] [gain]
+
 OpenBMC_apss_sensors.sh = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
 SYNTAX:
 [Only argument taken if you want to read a single specific channel in a loop]
