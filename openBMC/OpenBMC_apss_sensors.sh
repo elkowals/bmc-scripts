@@ -42,6 +42,7 @@ dec2hex() {
 }
 
 IDX=0
+INDEX=0
 while [ $IDX -lt 32 ] ; do
     REG=$(dec2hex $((IDX + 0x14)))
 	BYTE0=$(i2cget -f -y $BUS $ADDR 0x$REG b)
@@ -53,7 +54,8 @@ while [ $IDX -lt 32 ] ; do
     BYTE00="$(echo -e "${BYTE0}" | sed -e 's/[[:space:]]*$//')" 
     BYTE11="$(echo -e "${BYTE1}" | sed -e 's/[[:space:]]*$//')" 
     BYTE00=${BYTE00:2}
-    echo "CH$IDX $BYTE11$BYTE00"
+    echo "CH$INDEX $BYTE11$BYTE00"
+    INDEX=$((INDEX+1))
     IDX=$((IDX+1))
 done
 
