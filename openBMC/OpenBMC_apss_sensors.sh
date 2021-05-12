@@ -52,6 +52,7 @@ while [ $IDX -lt 32 ] ; do
 	#BYTE1=`iicmaster -b /dev/iic/$BUS -a $ADDR -W 1 -o 0x$REG -r 1|sed -n 1p`
     BYTE00="$(echo -e "${BYTE0}" | sed -e 's/[[:space:]]*$//')" 
     BYTE11="$(echo -e "${BYTE1}" | sed -e 's/[[:space:]]*$//')" 
+    BYTE00=${BYTE00:2}
     IDX=$((IDX+1))
     echo "$BYTE11$BYTE00"
 done
