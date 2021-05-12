@@ -30,13 +30,13 @@ EXAMPLE:
 OpenBMC_apss_readings.py = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
 SYNTAX:
 [Only argument taken if you want to read a single specific channel in a loop]
-python apss_readings.py [channel] [offset] [gain]
+./apss_readings.py [channel] [offset] [gain]
 
 EXAMPLE:
-      #python apss_readings.py
+      #./apss_readings.py
 It will query all channels.
 
-      #.python apss_readings.py 2 0.001 6.5
+      #./apss_readings.py 2 0.001 6.5
 It will loop queries to Channel 2 indifinitely with the offset and gain specified and save them into channel_2.txt
 
 OpenBMC_apss_sensors.sh = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
