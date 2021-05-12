@@ -30,10 +30,14 @@ EXAMPLE:
 
 OpenBMC_apss_sensors.sh = Collects RAW sensor readings, need to use spreadsheet to post-process readings into actual wattages.
 SYNTAX:
-[No arguments taken]
+[Only argument taken if you want to read a single specific channel in a loop]
 
 EXAMPLE:
       #./apss_sensors.sh
+It will query all channels.
+
+      #./apss.sh 2 | tee ch2.txt
+It will loop queries to Channel 2 indifinitely and save them into ch2.txt
 
 
 OpenBMC_fan_speed.sh = running './fan_speed.sh will change fan speeds.
