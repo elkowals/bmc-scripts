@@ -45,19 +45,20 @@ elif sys.argv[1] == "help":
 	
 
 else:
-
+	
+	channel=sys.argv[1]
 	offset=sys.argv[2]
 	gain=sys.argv[3]
-	channel=sys.argv[1]
-	IDX=0
 	
+	IDX=0
+	file = open("channel_"+channel+".txt","w")
 	while True:
-		REG=hex((int(channel,2)*2) + int("0x14",16))
+		REG=hex((int(channel) * 2) + int("0x14",16))
 		BYTE0="{0:b}".format(int(os.popen("i2cget -f -a -y " + str(BUS) +" " + ADDR + " " + REG).read(),16))
 		while len(BYTE0) != 8:
 			BYTE0="0"+BYTE0
 		
-		REG=hex((int(channel,2)*2) + 1 + int("0x14",16))
+		REG=hex((int(channel) * 2) + 1 + int("0x14",16))
 		BYTE1="{0:b}".format(int(os.popen("i2cget -f -a -y " + str(BUS) +" " + ADDR + " " + REG).read(),16))
 		while len(BYTE1) != 8:
 			BYTE1="0"+BYTE1
@@ -76,5 +77,5 @@ else:
 		today = datetime.datetime.now()
 		date_time = today.strftime("%m/%d/%Y, %H:%M:%S")
 		print("CH"+str(channel)+" "+str(conversion)+" - "+HEX1+HEX0[2:]+" at  "+date_time)
-		
+		file.write("CH"+str(channel)+" "+str(conversion)+" - "+HEX1+HEX0[2:]+" at  "+date_time+" \n")
 	
