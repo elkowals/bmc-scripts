@@ -9,7 +9,7 @@ BUS=3
 HEX_DIGITS="0123456789ABCDEF"
 ADDR="0x38"
 
-if sys.arv[1] == "help":
+if sys.argv[1] == "help":
 	print("python apss_readings.py [channel] [offset] [gain]")
 	print("examples:")
 	print("python apss_readings.py 2 0.001 6.5")
