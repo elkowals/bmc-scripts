@@ -3,13 +3,50 @@
 import sys
 import os
 import datetime
+try:
+	import apss_config
+	OFFSETS=apss_config.OFFSETS
+	GAINS=apss_config.GAINS
+	
+except ModuleNotFoundError:
+	#error handling
+	OFFSETS=[0,0.001,	#CH0
+		 0.001,		#CH1
+		 -0.001,	#CH2
+		 -0.001,	#CH3
+		 -0.001,	#CH4
+		 -0.001,	#CH5
+		 -0.001,	#CH6
+		 -0.002,	#CH7
+		 -0.006,	#CH8
+		 0,0,0,		#CH9-11
+		 -0.001,	#CH12
+		 -0.005,	#CH13
+		 -0.003,	#CH14
+		 -0.001]	#CH15
+		 
+	GAINS=	[24.97,		#CH0
+		 6.5,		#CH1
+		 26.54,		#CH2
+		 26.54,		#CH3
+		 18.6,		#CH4
+		 18.6,		#CH5
+		 40,		#CH6
+		 40,		#CH7
+		 78.2,		#CH8
+		 0,0,0,		#CH9-11
+		 5,			#CH12
+		 27.98,		#CH13
+		 40,		#CH14
+		 18.6]		#CH15
+	pass
+
 
 BUS=3
 
 HEX_DIGITS="0123456789ABCDEF"
 ADDR="0x38"
-OFFSETS=[0,0.001,-0.001,-0.001,-0.001,-0.001,-0.001,-0.002,-0.006,0,0,0,-0.001,-0.005,-0.003,-0.001]
-GAINS=	[24.97,6.5,26.54,26.54,18.6,18.6,40,40,78.2				 ,0,0,0,5,27.98,40,18.6]
+
 CHANNELS=["12V_IMONBUF_AUXCONN","12V_PSU","12V_CURR_IMONBUF_VRM_DCM0","12V_CURR_IMONBUF_VRM_DCM1","12V_A_C_IMONBUF_DCM0","12V_B_D_IMONBUF_DCM1","12V_E_F_G_DCM0_DDIM_CURR","12V_H_J_K_DCM1_DDIM_CURR","12V_IMONBUF_240VA","NA","NA","NA","12VCS_CURR","12V_CURR_FAN","12V_CURR_BPLANES","12V_L_M_IO_CURR"]
 totalPower=0
 if len(sys.argv) < 2:
