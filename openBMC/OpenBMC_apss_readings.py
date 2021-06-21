@@ -100,7 +100,7 @@ if len(sys.argv) < 2:
 elif sys.argv[1] == "ALL":
 	today = datetime.datetime.now()
 	date_time = today.strftime("%m_%d_%Y__%H_%M_%S")
-	file = open("APSS_SYSTEM_POWER"+date_time+".txt","w")
+	file = open(sys.argv[2]+date_time+".txt","w")
 	while True:
 		totalPower=0
 		IDX=0
@@ -147,3 +147,55 @@ elif sys.argv[1] == "ALL":
 			
 		print("System power = "+str(totalPower)+" W at  "+date_time)
 		file.write("System power = "+str(totalPower)+" W at  "+date_time+" \n")
+
+else:
+	today = datetime.datetime.now()
+	date_time = today.strftime("%m_%d_%Y__%H_%M_%S")
+	file = open(sys.argv[2]+date_time+".txt","w")
+	while True:
+		totalPower=0
+		IDX=(int(sys.argv[1])*2)
+		INDEX=int(sys.argv[1])
+
+		REG=hex(IDX + int("0x14",16))
+		BYTE0="{0:b}".format(int(os.popen("i2cget -f -a -y " + str(BUS) +" " + ADDR + " " + REG).read(),16))
+		while len(BYTE0) != 8:
+			BYTE0="0"+BYTE0
+		
+		IDX=((IDX+1))
+		REG=hex(IDX + int("0x14",16))
+		BYTE1="{0:b}".format(int(os.popen("i2cget -f -a -y " + str(BUS) +" " + ADDR + " " + REG).read(),16))
+		while len(BYTE1) != 8:
+			BYTE1="0"+BYTE1
+		
+		HEX0=hex(int(BYTE0,2))
+		while len(HEX0) != 4:
+			HEX0="0x0"+HEX0[2:]
+		
+		HEX1=hex(int(BYTE1,2))
+		while len(HEX1) != 4:
+			HEX1="0x0"+HEX1[2:]
+		
+		decimal=int(HEX1+HEX0[2:],16)
+		calculatedVoltage=(decimal/4096)*2.048
+		conversion=(calculatedVoltage+float(OFFSETS[INDEX]))*float(GAINS[INDEX])
+		today = datetime.datetime.now()
+		date_time = today.strftime("%m/%d/%Y, %H:%M:%S")
+		if INDEX==1:
+			INDEX+=1
+			IDX+=1
+			continue
+		elif INDEX >=9 and INDEX <=11:
+			INDEX+=1
+			IDX+=1
+			continue
+		else:
+			if INDEX >0:
+				totalPower+=(conversion*12)
+		
+		
+			
+		print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+"= "+str(totalPower)+" W at  "+date_time)
+		file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+"= "+str(totalPower)+" W at  "+date_time+" \n")
+
+
