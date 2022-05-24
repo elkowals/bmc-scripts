@@ -10,7 +10,7 @@ try:
 	
 except ModuleNotFoundError:
 	#error handling
-	OFFSETS=[0,0.001,	#CH0
+	OFFSETS=[0,	        #CH0
 		 0.001,		#CH1
 		 -0.001,	#CH2
 		 -0.001,	#CH3
@@ -35,7 +35,7 @@ except ModuleNotFoundError:
 		 40,		#CH7
 		 78.2,		#CH8
 		 0,0,0,		#CH9-11
-		 5,			#CH12
+		 5,	        #CH12
 		 27.98,		#CH13
 		 40,		#CH14
 		 18.6]		#CH15
