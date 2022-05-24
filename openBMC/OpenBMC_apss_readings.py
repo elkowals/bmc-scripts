@@ -151,7 +151,7 @@ elif sys.argv[1] == "ALL":
 else:
     today = datetime.datetime.now()
     date_time = today.strftime("%m_%d_%Y__%H_%M_%S")
-    file = open(sys.argv[2]+date_time+".txt","w")
+    file = open(sys.argv[2]+".txt","w")
     channels=sys.argv[1].split(",");
     print(channels);
     while True:
