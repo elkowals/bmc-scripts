@@ -151,7 +151,7 @@ elif sys.argv[1] == "ALL":
 else:
     today = datetime.datetime.now()
     date_time = today.strftime("%m_%d_%Y__%H_%M_%S")
-    file = open(sys.argv[2]+".txt","w")
+    file = open(sys.argv[2]+date_time+".txt","w")
     channels=sys.argv[1].split(",");
     print(channels);
     while True:
@@ -187,8 +187,8 @@ else:
             if INDEX==1:
                 INDEX+=1
                 IDX+=1
-                print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" "+str(conversion)+" V | Power = "+str(totalPower)+" W at  "+date_time)
-                file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" "+str(conversion)+" V | Power = "+str(totalPower)+" W at  "+date_time+" \n")
+                print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* V | Power = *"+str(totalPower)+"* W at  *"+date_time+"* \n")
+                file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* V | Power = *"+str(totalPower)+"* W at  *"+date_time+"* \n")
                 continue
             elif INDEX >=9 and INDEX <=11:
                 INDEX+=1
@@ -197,5 +197,5 @@ else:
             else:
                 if INDEX >0:
                     totalPower+=(conversion*12)
-                print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" "+str(conversion)+" Amps | Power = "+str(totalPower)+" W at  "+date_time)
-                file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" "+str(conversion)+" Amps | Power = "+str(totalPower)+" W at  "+date_time+" \n")
+                print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* Amps | Power = *"+str(totalPower)+"* W at *"+date_time+"* \n")
+                file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* Amps | Power = *"+str(totalPower)+"* W at *"+date_time+"* \n")
