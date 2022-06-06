@@ -3,6 +3,7 @@
 import sys
 import os
 import datetime
+import time
 try:
     import apss_config
     OFFSETS=apss_config.OFFSETS
@@ -153,6 +154,7 @@ else:
     date_time = today.strftime("%m_%d_%Y__%H_%M_%S")
     file = open(sys.argv[2]+".txt","w")
     channels=sys.argv[1].split(",");
+    last_time = time.time()
     print(channels);
     while True:
         for x in channels:
@@ -199,3 +201,6 @@ else:
                     totalPower+=(conversion*12)
                 print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* Amps | Power = *"+str(totalPower)+"* W at *"+date_time+"* \n")
                 file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* Amps | Power = *"+str(totalPower)+"* W at *"+date_time+"* \n")
+        if (time.time() - last_time) >=3600:
+            file.truncate(0)
+            last_time=time.time()
