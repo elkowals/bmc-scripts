@@ -15,5 +15,7 @@ while True:
     for index in range(1,25):
         amon=os.popen("cat /sys/bus/i2c/drivers/ucd9000/8-0011/hwmon/"+hwmon+"/in"+str(index)+"_input").read()
         amon=re.sub(r"[\n\t\s]*", "", amon)
-        print("Amon"+str(index)+":"+rainier_amon[index-1]+":"+amon+"mV")
-        file.write("Amon"+str(index)+":"+rainier_amon[index-1]+":"+amon+"mV\n")
+        print("Amon"+str(index)+"|"+rainier_amon[index-1]+"|"+amon+"mV")
+        today = datetime.datetime.now()
+        date_time = today.strftime("%m/%d/%Y, %H:%M:%S")
+        file.write("Amon"+str(index)+"|"+rainier_amon[index-1]+"|"+str(amon/1000)+"mV|"+date_time+"|\n")
