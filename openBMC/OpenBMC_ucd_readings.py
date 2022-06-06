@@ -18,4 +18,4 @@ while True:
         print("Amon"+str(index)+"|"+rainier_amon[index-1]+"|"+amon+"mV")
         today = datetime.datetime.now()
         date_time = today.strftime("%m/%d/%Y, %H:%M:%S")
-        file.write("Amon"+str(index)+"|"+rainier_amon[index-1]+"|"+str(amon/1000)+"mV|"+date_time+"|\n")
+        file.write("Amon"+str(index)+"|"+rainier_amon[index-1]+"|"+str(int(amon)/1000)+"mV|"+date_time+"|\n")
