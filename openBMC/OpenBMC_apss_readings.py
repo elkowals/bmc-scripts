@@ -201,6 +201,6 @@ else:
                     totalPower+=(conversion*12)
                 print("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* Amps | Power = *"+str(totalPower)+"* W at *"+date_time+"* \n")
                 file.write("CH"+str(INDEX)+"- "+CHANNELS[INDEX]+" *"+str(conversion)+"* Amps | Power = *"+str(totalPower)+"* W at *"+date_time+"* \n")
-        if (time.time() - last_time) >=3600:
+        if (time.time() - last_time) >=2:
             file.truncate(0)
             last_time=time.time()
