@@ -14,15 +14,13 @@ channelsUcd=sys.argv[1].split(",");
 file = open(sys.argv[2]+".txt","w")
 last_time = time.time()
 while True:
-    index=1;
     for ucdPin in channelsUcd:
         amon=os.popen("cat /sys/bus/i2c/drivers/ucd9000/8-0011/hwmon/"+hwmon+"/in"+ucdPin+"_input").read()
         amon=re.sub(r"[\n\t\s]*", "", amon)
-        print("Amon"+ucdPin+"|"+rainier_amon[index-1]+"|"+amon+"mV")
+        print("Amon"+ucdPin+"|"+rainier_amon[int(ucdPin)-1]+"|"+amon+"mV")
         today = datetime.datetime.now()
         date_time = today.strftime("%m/%d/%Y, %H:%M:%S")
-        file.write("Amon"+ucdPin+"|"+rainier_amon[index-1]+"|"+str(int(amon)/1000)+"V|"+date_time+"|\n")
-        index=index+1
+        file.write("Amon"+ucdPin+"|"+rainier_amon[int(ucdPin)-1]+"|"+str(int(amon)/1000)+"V|"+date_time+"|\n")
 
     if (time.time() - last_time) >=3600:
         file.truncate(0)
