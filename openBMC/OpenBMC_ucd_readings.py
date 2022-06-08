@@ -14,7 +14,7 @@ channelsUcd=sys.argv[1].split(",");
 file = open(sys.argv[2]+".txt","w")
 last_time = time.time()
 while True:
-    index=0;
+    index=1;
     for ucdPin in channelsUcd:
         amon=os.popen("cat /sys/bus/i2c/drivers/ucd9000/8-0011/hwmon/"+hwmon+"/in"+ucdPin+"_input").read()
         amon=re.sub(r"[\n\t\s]*", "", amon)
