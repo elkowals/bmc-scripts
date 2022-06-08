@@ -37,7 +37,7 @@ while True:
         if state == pins_values[index]:
             printedValue="echo \"Power-Telemetry triggered: index = "+pins[index]+" and value that triggered = "+pins_values[index]+"\" | systemd-cat";
             os.system(printedValue)
-            time.sleep(1)
+            time.sleep(60)
             if apss_id !="none" :
                 os.system("kill "+apss_id)
             if ucd_id !="none" :
